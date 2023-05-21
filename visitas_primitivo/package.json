@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "typescript": "^5.0.4"
+  },
+  "name": "ejerciciocorto1",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:dev": "npx nodemon"
+
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^20.2.1",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1"
+  }
+}
