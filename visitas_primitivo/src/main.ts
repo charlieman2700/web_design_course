@@ -1,21 +1,178 @@
 import * as http from "http";
 import * as fs from "fs";
-import * as path from "path";
 import * as querystring from "querystring";
 import * as url from "url";
 
 function indexRoute(_req: http.IncomingMessage, res: http.ServerResponse) {
-  const filePath = path.join(__dirname, "index.html");
+  const htmlIndex = `
 
-  fs.readFile(filePath, (err, data) => {
-    if (err) {
-      res.writeHead(500);
-      res.end("Internal Server Error");
-      return;
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Libro de visitas</title>
+    <style>
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        padding-top: 100px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+
+      .modal-content {
+        background-color: #fefefe;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+      }
+
+      .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      .close:hover,
+      .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Libro de Visitas</h1>
+    <a href="./comments">Ver los comentarios de los visitantes</a>
+    <h2>Este formulario le permite enviar comentarios sobre este sitio.</h2>
+    <form action="submitPost" method="POST">
+      <p>Nombre: <input type="text" name="nombre" size="30" /></p>
+      <p>Correo electrónico: <input type="text" name="email" size="30" /></p>
+      <p>Comentario:</p>
+      <textarea name="comentario" rows="5" cols="30"></textarea>
+      <p><input type="submit" name="submit" value="submit" /></p>
+    </form>
+    <!-- <a href="">Ver los comentarios de los visitantes</a> -->
+
+    <!-- The Modal -->
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <p id="message"></p>
+      </div>
+    </div>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const successMessage = params.get("success");
+      const errorMessage = params.get("error");
+      // Get the modal
+      var modal = document.getElementById("myModal");
+      var btn = document.getElementById("myBtn");
+      var span = document.getElementsByClassName("close")[0];
+      var message = document.getElementById("message");
+
+      span.onclick = function () {
+        modal.style.display = "none";
+        window.location.href = "./";
+      };
+
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+          window.location.href = "./";
+        }
+      };
+
+      if (successMessage || errorMessage) {
+        if (successMessage) {
+          message.innerHTML = successMessage;
+        } else {
+          message.innerHTML = errorMessage;
+        }
+        modal.style.display = "block";
+      }
+    </script>
+  </body>
+</html>
+`;
+
+  res.writeHead(200, { "Content-Type": "text/html" });
+  res.end(htmlIndex);
+}
+
+type Comment = {
+  name: string;
+  email: string;
+  content: string;
+  fecha: Date;
+};
+
+function showComments(_req: http.IncomingMessage, res: http.ServerResponse) {
+  let htmlData: string = `
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<h1>Libro de Visitas</h1>
+
+    <h2>Comentarios</h2>
+  `;
+  fs.readFile("./visitas.txt", (_err, data) => {
+    const lines = data.toString().split("\n");
+    const commentsNotParsed = lines
+      .map((line) => line.trim()) // Trim leading/trailing whitespace
+      .filter((line) => line !== ""); // Filter out empty lines
+    const commentsParsed: Comment[] = [];
+
+    commentsNotParsed.forEach((comment) => {
+      let commentParsed = JSON.parse(comment);
+      commentParsed.fecha = new Date(commentParsed.fecha);
+      commentsParsed.push(commentParsed);
+    });
+
+    for (const comment of commentsParsed) {
+      const formattedDate = comment.fecha.getDay() + "/" +
+        comment.fecha.getMonth() + "/" + comment.fecha.getFullYear() + " " +
+        comment.fecha.getHours() + ":" + comment.fecha.getMinutes() + ":" +
+        comment.fecha.getSeconds();
+      htmlData += `
+    <div class="commentBox">
+      <p class="commentName">Nombre: ${comment.name}</p>
+      <p class="commentEmail">Email: ${comment.email}</p>
+      <p class="commentText">Comentarios: ${comment.content}</p>
+      <p class="commentDate">Fecha: ${formattedDate}</p>
+    </div>
+<br>
+    `;
     }
 
-    res.writeHead(200, { "Content-Type": "text/html" });
-    res.end(data);
+    htmlData += `
+</body>
+</html>
+
+`;
+
+    res.setHeader("Content-Type", "text/html");
+    res.end(htmlData);
   });
 }
 
@@ -34,7 +191,6 @@ function submitPost(req: http.IncomingMessage, res: http.ServerResponse) {
 
       if (!parsedData.nombre || !parsedData.email || !parsedData.comentario) {
         res.statusCode = 302; // Redirect status code
-        console.log("Pls fill all the fields");
         res.setHeader(
           "Location",
           "/?error=" + encodeURIComponent("Pls fill all the fields"),
@@ -43,9 +199,19 @@ function submitPost(req: http.IncomingMessage, res: http.ServerResponse) {
         return;
       }
 
+      const comment: Comment = {
+        name: parsedData.nombre.toString(),
+        email: parsedData.email.toString(),
+        content: parsedData.comentario.toString(),
+        fecha: new Date(),
+      };
+
+      // @ts-ignore
+      comment.fecha = comment.fecha.toISOString();
+
       fs.appendFile(
         "./visitas.txt",
-        JSON.stringify(parsedData) + "\n",
+        JSON.stringify(comment) + "\n",
         (err) => {
           if (err) throw err;
           console.log("The file has been saved!");
@@ -68,27 +234,9 @@ function submitPost(req: http.IncomingMessage, res: http.ServerResponse) {
   }
 }
 
-function getComments(req: http.IncomingMessage, res: http.ServerResponse) {
-  if (req.method === "GET") {
-    fs.readFile("./visitas.txt", (_err, data) => {
-      const lines = data.toString().split("\n");
-      const comments = lines
-        .map((line) => line.trim()) // Trim leading/trailing whitespace
-        .filter((line) => line !== ""); // Filter out empty lines
-
-      res.statusCode = 200;
-      res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify(comments));
-    });
-  } else {
-    res.statusCode = 400;
-    res.end("Bad Request");
-  }
-}
-
 let getRoutes = new Map<string, Function>([
   ["/", indexRoute],
-  ["/comments", getComments],
+  ["/comments", showComments],
 ]);
 
 let postRoutes = new Map<string, Function>([
@@ -96,8 +244,7 @@ let postRoutes = new Map<string, Function>([
 ]);
 
 let putRoutes = new Map<string, Function>([]);
-let deleteRoutes = new Map<string, Function>([
-]);
+let deleteRoutes = new Map<string, Function>([]);
 
 const server = http.createServer(
   (req: http.IncomingMessage, res: http.ServerResponse) => {
@@ -105,9 +252,6 @@ const server = http.createServer(
 
     const urlObject = url.parse(req.url!, true);
     const pathName = urlObject.pathname;
-    console.log(pathName);
-
-    console.log(req.method + " " + req.url);
 
     if (req.method === "GET") {
       methodRouter = getRoutes;
