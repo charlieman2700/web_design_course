@@ -2,6 +2,7 @@ import * as http from "http";
 import * as fs from "fs";
 import * as querystring from "querystring";
 import * as url from "url";
+import { hostname } from "node:os";
 
 function indexRoute(_req: http.IncomingMessage, res: http.ServerResponse) {
   const htmlIndex = `
@@ -280,8 +281,10 @@ const server = http.createServer(
   },
 );
 
-const port = 3000;
+// const port = 3000;
 
-server.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
+// @ts-ignore
+server.listen(() => {
+  // @ts-ignore
+  console.log(`Server running at http://${hostname}:${server.address().port}/`);
 });

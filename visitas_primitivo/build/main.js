@@ -27,6 +27,7 @@ var http = __importStar(require("http"));
 var fs = __importStar(require("fs"));
 var querystring = __importStar(require("querystring"));
 var url = __importStar(require("url"));
+var node_os_1 = require("node:os");
 function indexRoute(_req, res) {
     var htmlIndex = "\n\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <title>Libro de visitas</title>\n    <style>\n      body {\n        font-family: Arial, Helvetica, sans-serif;\n      }\n\n      .modal {\n        display: none;\n        position: fixed;\n        z-index: 1;\n        padding-top: 100px;\n        left: 0;\n        top: 0;\n        width: 100%;\n        height: 100%;\n        overflow: auto;\n        background-color: rgb(0, 0, 0);\n        background-color: rgba(0, 0, 0, 0.4);\n      }\n\n      .modal-content {\n        background-color: #fefefe;\n        margin: auto;\n        padding: 20px;\n        border: 1px solid #888;\n        width: 80%;\n      }\n\n      .close {\n        color: #aaaaaa;\n        float: right;\n        font-size: 28px;\n        font-weight: bold;\n      }\n\n      .close:hover,\n      .close:focus {\n        color: #000;\n        text-decoration: none;\n        cursor: pointer;\n      }\n    </style>\n  </head>\n\n  <body>\n    <h1>Libro de Visitas</h1>\n    <a href=\"./comments\">Ver los comentarios de los visitantes</a>\n    <h2>Este formulario le permite enviar comentarios sobre este sitio.</h2>\n    <form action=\"submitPost\" method=\"POST\">\n      <p>Nombre: <input type=\"text\" name=\"nombre\" size=\"30\" /></p>\n      <p>Correo electr\u00F3nico: <input type=\"text\" name=\"email\" size=\"30\" /></p>\n      <p>Comentario:</p>\n      <textarea name=\"comentario\" rows=\"5\" cols=\"30\"></textarea>\n      <p><input type=\"submit\" name=\"submit\" value=\"submit\" /></p>\n    </form>\n    <!-- <a href=\"\">Ver los comentarios de los visitantes</a> -->\n\n    <!-- The Modal -->\n    <div id=\"myModal\" class=\"modal\">\n      <!-- Modal content -->\n      <div class=\"modal-content\">\n        <span class=\"close\">&times;</span>\n        <p id=\"message\"></p>\n      </div>\n    </div>\n\n    <script>\n      const params = new URLSearchParams(window.location.search);\n      const successMessage = params.get(\"success\");\n      const errorMessage = params.get(\"error\");\n      // Get the modal\n      var modal = document.getElementById(\"myModal\");\n      var btn = document.getElementById(\"myBtn\");\n      var span = document.getElementsByClassName(\"close\")[0];\n      var message = document.getElementById(\"message\");\n\n      span.onclick = function () {\n        modal.style.display = \"none\";\n        window.location.href = \"./\";\n      };\n\n      window.onclick = function (event) {\n        if (event.target == modal) {\n          modal.style.display = \"none\";\n          window.location.href = \"./\";\n        }\n      };\n\n      if (successMessage || errorMessage) {\n        if (successMessage) {\n          message.innerHTML = successMessage;\n        } else {\n          message.innerHTML = errorMessage;\n        }\n        modal.style.display = \"block\";\n      }\n    </script>\n  </body>\n</html>\n";
     res.writeHead(200, { "Content-Type": "text/html" });
@@ -140,7 +141,9 @@ var server = http.createServer(function (req, res) {
         res.end("404 Not Found");
     }
 });
-var port = 3000;
-server.listen(port, function () {
-    console.log("Server listening on port ".concat(port));
+// const port = 3000;
+// @ts-ignore
+server.listen(function () {
+    // @ts-ignore
+    console.log("Server running at http://".concat(node_os_1.hostname, ":").concat(server.address().port, "/"));
 });
