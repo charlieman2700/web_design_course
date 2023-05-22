@@ -2,31 +2,21 @@ import * as http from "http";
 import * as fs from "fs";
 import * as path from "path";
 import * as querystring from "querystring";
+import * as url from "url";
 
 function indexRoute(_req: http.IncomingMessage, res: http.ServerResponse) {
-  res.writeHead(200, { "Content-Type": "text/html" });
-  res.end(`
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Libro de visitas</title>
-  </head>
-  <body>
-    <h1>Libro de Visitas</h1>
-    <a href="">Ver los comentarios de los visitantes</a>
-    <h2>Este formulario le permite enviar comentarios sobre este sitio.</h2>
-    <form action="submitPost" method="POST">
-      <p>Nombre: <input type="text" name="nombre" size="30" /></p>
-      <p>Correo electrónico: <input type="text" name="email" size="30" /></p>
-      <p>Comentario:</p>
-      <textarea name="comentario" rows="5" cols="30"></textarea>
-      <p><input type="submit" name="submit" value="submit" /></p>
-    </form>
-    <a href="">Ver los comentarios de los visitantes</a>
-  </body>
-</html>
-`);
+  const filePath = path.join(__dirname, "index.html");
+
+  fs.readFile(filePath, (err, data) => {
+    if (err) {
+      res.writeHead(500);
+      res.end("Internal Server Error");
+      return;
+    }
+
+    res.writeHead(200, { "Content-Type": "text/html" });
+    res.end(data);
+  });
 }
 
 function submitPost(req: http.IncomingMessage, res: http.ServerResponse) {
@@ -36,19 +26,59 @@ function submitPost(req: http.IncomingMessage, res: http.ServerResponse) {
   ) {
     let body = "";
     req.on("data", (chunk) => {
-      console.log(chunk.toString());
       body += chunk.toString();
     });
-    console.log("Termina")
 
     req.on("end", () => {
       const parsedData = querystring.parse(body);
 
-      console.log(parsedData);
+      if (!parsedData.nombre || !parsedData.email || !parsedData.comentario) {
+        res.statusCode = 302; // Redirect status code
+        console.log("Pls fill all the fields");
+        res.setHeader(
+          "Location",
+          "/?error=" + encodeURIComponent("Pls fill all the fields"),
+        );
+        res.end();
+        return;
+      }
+
+      fs.appendFile(
+        "./visitas.txt",
+        JSON.stringify(parsedData) + "\n",
+        (err) => {
+          if (err) throw err;
+          console.log("The file has been saved!");
+        },
+      );
+
+      const successMessage = "Form submitted successfully";
+
+      res.statusCode = 302; // Redirect status code
+      res.setHeader(
+        "Location",
+        "/?success=" + encodeURIComponent(successMessage),
+      );
+
+      res.end();
+    });
+  } else {
+    res.statusCode = 400;
+    res.end("Bad Request");
+  }
+}
+
+function getComments(req: http.IncomingMessage, res: http.ServerResponse) {
+  if (req.method === "GET") {
+    fs.readFile("./visitas.txt", (_err, data) => {
+      const lines = data.toString().split("\n");
+      const comments = lines
+        .map((line) => line.trim()) // Trim leading/trailing whitespace
+        .filter((line) => line !== ""); // Filter out empty lines
 
       res.statusCode = 200;
       res.setHeader("Content-Type", "application/json");
-      res.end(JSON.stringify(parsedData));
+      res.end(JSON.stringify(comments));
     });
   } else {
     res.statusCode = 400;
@@ -58,6 +88,7 @@ function submitPost(req: http.IncomingMessage, res: http.ServerResponse) {
 
 let getRoutes = new Map<string, Function>([
   ["/", indexRoute],
+  ["/comments", getComments],
 ]);
 
 let postRoutes = new Map<string, Function>([
@@ -66,12 +97,17 @@ let postRoutes = new Map<string, Function>([
 
 let putRoutes = new Map<string, Function>([]);
 let deleteRoutes = new Map<string, Function>([
-  // ["/submitPost", submitPost],
 ]);
 
 const server = http.createServer(
   (req: http.IncomingMessage, res: http.ServerResponse) => {
     let methodRouter: Map<string, Function> | null = null;
+
+    const urlObject = url.parse(req.url!, true);
+    const pathName = urlObject.pathname;
+    console.log(pathName);
+
+    console.log(req.method + " " + req.url);
 
     if (req.method === "GET") {
       methodRouter = getRoutes;
@@ -86,8 +122,8 @@ const server = http.createServer(
     }
 
     if (methodRouter !== null) {
-      if (methodRouter.has(req.url!)) {
-        methodRouter.get(req.url!)!(req, res);
+      if (methodRouter.has(pathName!)) {
+        methodRouter.get(pathName!)!(req, res);
         return;
       } else {
         res.writeHead(404);
@@ -97,48 +133,6 @@ const server = http.createServer(
       res.writeHead(404);
       res.end("404 Not Found");
     }
-
-    //   let filePath = "." + req.url!;
-    //
-    //   if (filePath === "./") {
-    //     filePath = "./index.html"; // Archivo predeterminado para la ruta raíz
-    //   }
-    //
-    //   const extname = path.extname(filePath);
-    //   let contentType = "text/html";
-    //
-    //   switch (extname) {
-    //     case ".js":
-    //       contentType = "text/javascript";
-    //       break;
-    //     case ".css":
-    //       contentType = "text/css";
-    //       break;
-    //     case ".json":
-    //       contentType = "application/json";
-    //       break;
-    //     case ".png":
-    //       contentType = "image/png";
-    //       break;
-    //     case ".jpg":
-    //       contentType = "image/jpg";
-    //       break;
-    //   }
-    //
-    //   fs.readFile(filePath, (error, content) => {
-    //     if (error) {
-    //       if (error.code === "ENOENT") {
-    //         res.writeHead(404);
-    //         res.end("404 Not Found");
-    //       } else {
-    //         res.writeHead(500);
-    //         res.end("Internal Server Error");
-    //       }
-    //     } else {
-    //       res.writeHead(200, { "Content-Type": contentType });
-    //       res.end(content, "utf-8");
-    //     }
-    //   });
   },
 );
 
