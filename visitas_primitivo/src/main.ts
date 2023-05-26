@@ -138,6 +138,7 @@ function showComments(_req: http.IncomingMessage, res: http.ServerResponse) {
     <h2>Comentarios</h2>
   `;
   fs.readFile("./visitas.txt", (_err, data) => {
+
     const lines = data.toString().split("\n");
     const commentsNotParsed = lines
       .map((line) => line.trim()) // Trim leading/trailing whitespace
