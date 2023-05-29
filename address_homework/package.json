@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npx tailwindcss -i ./src/input.css -o ./static/style.css &&  ts-node-dev ./src/index.ts",
+    "dev": "npm run tailwindcssDev & npm run ts-node-dev",
+    "ts-node-dev": "ts-node-dev --respawn  ./src/./*.ts",
+    "tailwindcssDev": "npx tailwindcss -i ./src/input.css -o ./static/style.css --watch",
     "build": "tsc",
     "start": "node build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,16 +19,8 @@
     "express": "^4.18.2",
     "express-handlebars": "^7.0.7"
   },
-  "prisma": {
-    "seed": "ts-node prisma/seed.ts"
-  },
-  "eslintConfig": {
-    "extends": "./node_modules/ts-standard/eslintrc.json",
-    "parserOptions": {
-      "project": "./tsconfig.json"
-    }
-  },
   "devDependencies": {
+    "@tailwindcss/forms": "^0.5.3",
     "@types/express": "^4.17.17",
     "@types/morgan": "^1.9.4",
     "@types/node": "^20.2.5",
@@ -37,5 +31,14 @@
     "ts-node-dev": "^2.0.0",
     "ts-standard": "^12.0.2",
     "typescript": "^5.0.4"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/ts-standard/eslintrc.json",
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    }
   }
 }
