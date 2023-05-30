@@ -1,0 +1,26 @@
+{
+  "development": {
+    "database": "ci0137_eb87741",
+    "username": "eb87741",
+    "password": "Xeb87741!",
+    "host": "localhost",
+    "port": 3001,
+    "dialect": "mysql"
+  },
+  "test": {
+    "database": "ci0137_eb87741",
+    "username": "eb87741",
+    "password": "Xeb87741!",
+    "host": "localhost",
+    "port": 3001,
+    "dialect": "mysql"
+  },
+  "production": {
+    "database": "ci0137_eb87741",
+    "username": "eb87741",
+    "password": "Xeb87741!",
+    "host": "localhost",
+    "port": 3001,
+    "dialect": "mysql"
+  }
+}

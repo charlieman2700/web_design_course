@@ -1,0 +1,32 @@
+
+<form method="POST" action="/address/create">
+    <div class="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
+      <div>
+        <h2 class="text-base font-semibold leading-7 text-gray-900">Crear Dirección</h2>
+        <p class="mt-1 text-sm leading-6 text-gray-600">En esta sección puede crear una dirección</p>
+      </div>
+
+      {{> InputField id="name"  label="Nombre" type="text" }}
+      {{> InputField id="lastName" label="Apellidos" type="text" }}
+      {{> InputField id="homeAddress" label="Dirección de la casa" type="text" }}
+    {{> InputField id="homePhone" label="Teléfono de la casa" pattern="\d{8}" type="text" maxLength="8" }}
+      {{> InputField id="workAddress" label="Dirección del trabajo" type="text" }}
+    {{> InputField id="workPhone" label="Teléfono del trabajo" pattern="\d{8}" type="text" maxLength="8" }}
+      </div>
+    </div>
+
+
+  <div class="mt-6 flex items-center justify-end gap-x-6">
+    <button onclick="goToIndex()" type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancelar</button>
+    <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Guardar</button>
+  </div>
+</form>
+
+<script>
+function goToIndex() {
+  window.location.replace("/address");
+}
+</script>
+
+
+

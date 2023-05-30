@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
     "target": "es6",
+    "skipLibCheck": true,
     "module": "commonjs",
-    "rootDir": "./src",
+    "rootDir": "./",
     "outDir": "./build",
     "esModuleInterop": true,
     "strict": true,
+    "allowJs": true,
     "noUnusedLocals": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
