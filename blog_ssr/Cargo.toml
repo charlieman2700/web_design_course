@@ -1,0 +1,25 @@
+[package]
+name = "web_design_blog_ssr"
+version = "0.1.0"
+edition = "2021"
+
+
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+dotenv_rs = "0.16.1"
+rocket = {version ="0.5.0-rc.3", features = ["json"]}
+prisma-client-rust = { git = "https://github.com/Brendonovich/prisma-client-rust", tag = "0.6.8" }
+serde = "1.0.163"
+
+
+[dependencies.rocket_dyn_templates]
+version = "=0.1.0-rc.3"
+features = ["handlebars"]
+
+[workspace]
+members = [
+"prisma-cli"
+]
+
