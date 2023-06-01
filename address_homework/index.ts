@@ -7,6 +7,7 @@ import indexRouter from './routes/index'
 import addressRouter from './routes/address'
 import * as dotenv from 'dotenv'
 import { sequelize } from './database/sequelize'
+import { hostname } from 'node:os'
 
 dotenv.config()
 
@@ -41,6 +42,15 @@ app.use('/address', addressRouter)
 app.use(express.static(path.join(__dirname, './static')))
 
 // Server setup
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`)
+// app.listen(port, () => {
+//   console.log(`Server running on port ${port}`)
+// })
+app.listen(3002, '0.0.0.0', 15, () => {
+  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+  console.log(`Server running at http://${hostname}:${port}/`)
 })
+
+// app.listen(,() => {
+//   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+//   console.log(`Server running at http://${hostname}:${port}/`)
+// })
