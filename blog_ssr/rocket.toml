@@ -2,6 +2,5 @@
 [default]
 address = "127.0.0.1"
 port = 5600
-template_dir = "views"
+template_dir = "src/views"
 
-[global.databases]

@@ -9,7 +9,7 @@ edition = "2021"
 
 [dependencies]
 dotenv_rs = "0.16.1"
-rocket = {version ="0.5.0-rc.3", features = ["json"]}
+rocket = {version ="0.5.0-rc.3", features = ["json" ]}
 prisma-client-rust = { git = "https://github.com/Brendonovich/prisma-client-rust", tag = "0.6.8" }
 serde = "1.0.163"
 
