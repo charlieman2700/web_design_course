@@ -1,56 +1,63 @@
-{{#*inline "page"}}
-<div class="min-h-full">
-  <header class="bg-indigo-600 pb-24">
-    <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-      <div class="relative flex items-center justify-center py-5 lg:justify-between">
-        <!-- Logo -->
-        <div class="absolute left-0 flex-shrink-0 lg:static">
-          <a href="#">
-            <img class="h-8 w-auto"
-                 src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=300"
-                 alt="Your Company">
-          </a>
-        </div>
-        <h1 class="text-5xl text-white">Mi diario Web</h1>
-        <!-- Right section on desktop -->
-        <div class="hidden lg:ml-4 lg:flex lg:items-center lg:pr-0.5">
-          <div class=" ml-4 flex-shrink-0 ">
-            <div class=""
-                 onclick="toggleUserDropDownVisibility()"
-                 id="user-menu-button"
-                 >
-              <button class=" font-bold bg-white flex items-center justify-center h-8 w-8 rounded-full">
-                {{ firstCharUpper username }}
-              </button>
-            </button>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My SSR App</title>
+    <link href="output.css" rel="stylesheet">
+
+  </head>
+  <body>
+    <div class="min-h-full">
+      <header class="bg-indigo-600 pb-24">
+        <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+          <div class="relative flex items-center justify-center py-5 lg:justify-between">
+            <!-- Logo -->
+            <div class="absolute left-0 flex-shrink-0 lg:static">
+              <a href="#">
+                <img class="h-8 w-auto"
+                     src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=300"
+                     alt="Your Company">
+              </a>
+            </div>
+            <h1 class="text-5xl text-white">Mi diario Web</h1>
+            <!-- Right section on desktop -->
+            <div class="hidden lg:ml-4 lg:flex lg:items-center lg:pr-0.5">
+              <div class=" ml-4 flex-shrink-0 ">
+                <div class=""
+                     onclick="toggleUserDropDownVisibility()"
+                     id="user-menu-button">
+                  <button class=" font-bold bg-white flex items-center justify-center h-8 w-8 rounded-full">
+                    {{ firstCharUpper username }}
+                  </button>
+                </button>
+              </div>
+              {{> HomeScreen/components/dropDown}}
+            </div>
           </div>
-          {{> HomeScreen/components/dropDown}}
+        </div>
+        <div class="hidden border-t border-white border-opacity-20 py-5 lg:block"></div>
+      </div>
+    </header>
+    <main class="-mt-24 pb-8">
+      <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+        <!-- Main 3 column grid -->
+        <div class="grid grid-cols-1 items-start gap-4 lg:grid-cols-5 lg:gap-8">
+          <!-- Right column -->
+          {{> HomeScreen/components/leftColumn}}
+          {{> HomeScreen/components/rightColumn}}
         </div>
       </div>
-    </div>
-    <div class="hidden border-t border-white border-opacity-20 py-5 lg:block"></div>
+    </main>
+    <footer>
+      <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+        <div class="border-t border-gray-200 py-8 text-center text-sm text-gray-500 sm:text-left">
+          <span class="block sm:inline">&copy; 2021 Your Company, Inc.</span> <span class="block sm:inline">All rights
+          reserved.</span>
+        </div>
+      </div>
+    </footer>
   </div>
-</header>
-<main class="-mt-24 pb-8">
-  <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-    <!-- Main 3 column grid -->
-    <div class="grid grid-cols-1 items-start gap-4 lg:grid-cols-5 lg:gap-8">
-      <!-- Right column -->
-      {{> HomeScreen/components/leftColumn}}
-      {{> HomeScreen/components/rightColumn}}
-    </div>
-  </div>
-</main>
-<footer>
-  <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-    <div class="border-t border-gray-200 py-8 text-center text-sm text-gray-500 sm:text-left">
-      <span class="block sm:inline">&copy; 2021 Your Company, Inc.</span> <span class="block sm:inline">All rights
-      reserved.</span>
-    </div>
-  </div>
-</footer>
-</div>
-<script>
+  <script>
   let isActive = false;
 
   const userDropdown = document.getElementById("userDropdownMenu");
@@ -67,6 +74,6 @@
 
 
 
-</script>
-{{/inline}}
-{{> layout}}
+  </script>
+</body>
+</html>
