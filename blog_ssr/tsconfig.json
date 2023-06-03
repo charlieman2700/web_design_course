@@ -1,0 +1,16 @@
+{
+  "extends": "./node_modules/gts/tsconfig-google.json",
+  "compilerOptions": {
+    "rootDir": "./typescriptSrc/",
+    "outDir": "public/",
+    "lib": ["ES2017", "DOM"],
+    "target": "ES2015",
+    "module": "ES2015",
+    "moduleResolution": "node"
+
+  },
+  "include": [
+    "typescriptSrc/**/*.ts",
+    "test/**/*.ts"
+  ]
+}
