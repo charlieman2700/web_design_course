@@ -1,0 +1,58 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "cargo prisma"
+  output   = "../src/prisma.rs"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int @id @default(autoincrement())
+  user_type User_Type 
+  name      String
+  email     String @unique
+  password  String
+  posts     Post[]
+  comments  Comment[]
+
+}
+
+enum User_Type {
+  PERSON
+  ENTERPRISE
+}
+
+model Post{
+  id        Int @id @default(autoincrement())
+  title     String
+  abstract  String
+  imageLink String
+  content   String
+  user      User @relation(fields: [user_id], references: [id])
+  user_id   Int
+  comments  Comment[]
+}
+
+model Comment{
+  id        Int @id @default(autoincrement())
+  content   String
+  user      User? @relation(fields: [user_id], references: [id])
+  user_id   Int?
+  guest_email String?
+  post      Post @relation(fields: [post_id], references: [id])
+  post_id   Int
+  categories CommentCategory[]
+}
+
+model CommentCategory{
+  id        Int @id @default(autoincrement())
+  name      String
+  comments  Comment[]
+}
+
+
