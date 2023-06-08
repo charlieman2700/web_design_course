@@ -242,6 +242,12 @@ checksum = "9e1b586273c5702936fe7b7d6896644d8be71e6314cfe09d3167c95f712589e8"
 
 [[package]]
 name = "base64"
+version = "0.20.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0ea22880d78093b0cbe17c89f64a7d457941e65759157ec6cb31a31d652b05e5"
+
+[[package]]
+name = "base64"
 version = "0.21.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "604178f6c5c21f02dc555784810edfb88d34ac2c73b2eae109655649ee73ce3d"
@@ -1149,18 +1155,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "fireauth"
-version = "0.1.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cc25de4b75f65817fc57e791e437d53df65b04ecbc769850d3d1ea22126192b4"
-dependencies = [
- "chrono",
- "reqwest",
- "serde",
- "thiserror",
-]
-
-[[package]]
 name = "fixedbitset"
 version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1899,6 +1893,21 @@ checksum = "6971da4d9c3aa03c3d8f3ff0f4155b534aad021292003895a469716b2a230378"
 dependencies = [
  "base64 0.21.2",
  "pem",
+ "ring",
+ "serde",
+ "serde_json",
+ "simple_asn1",
+]
+
+[[package]]
+name = "jsonwebtokens"
+version = "1.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5fb4c5f203abfb17d5f30a9f8e44c91c222fe5dcff9d6f57090167c4cfc22b70"
+dependencies = [
+ "base64 0.20.0",
+ "pem",
+ "regex",
  "ring",
  "serde",
  "serde_json",
@@ -4585,13 +4594,13 @@ name = "ssr_post_app"
 version = "0.1.0"
 dependencies = [
  "async_once",
- "fireauth",
  "handlebars",
+ "jsonwebtokens",
  "lazy_static",
  "prisma-client-rust",
- "reqwest",
  "salvo",
  "serde",
+ "serde_json",
  "tokio",
  "tracing",
  "tracing-subscriber",

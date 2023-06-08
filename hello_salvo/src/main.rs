@@ -4,7 +4,6 @@ mod controllers;
 mod prisma;
 use async_once::AsyncOnce;
 use controllers::{auth, home_screen};
-use fireauth;
 use handlebars::Handlebars;
 
 use salvo::serve_static::StaticDir;
@@ -28,10 +27,6 @@ lazy_static! {
         let client = prisma::prisma::new_client().await.unwrap();
         client
     });
-    pub static ref FIREBASE: fireauth::FireAuth = {
-        let apiKey = String::from(" AIzaSyBvmnMkFLvLblR5PG_9-MZowokyCGJf8pA");
-        fireauth::FireAuth::new(apiKey)
-    };
 }
 #[tokio::main]
 async fn main() {

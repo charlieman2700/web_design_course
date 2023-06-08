@@ -9,14 +9,15 @@ edition = "2021"
 handlebars = {version ="4.3.7", features=["dir_source"]}
 lazy_static = "1.4.0"
 salvo = {version ="*", features = ["logging", "serve-static", "anyhow", "jwt-auth"]}
-serde = "1.0.163"
+serde = {version = "1.0.163", features = ["derive"]}
+serde_json = "1.0"
 tokio = { version = "1", features = ["macros"] }
 tracing = "0.1"
 tracing-subscriber = "0.3"
 prisma-client-rust = { git = "https://github.com/Brendonovich/prisma-client-rust", tag = "0.6.8" }
 async_once = "0.2.6"
-reqwest = {version = "0.11.18", features = ["json", "blocking"]}
-fireauth = "0.1.5"
+jsonwebtokens = "1"
+
 
 
 [workspace]
