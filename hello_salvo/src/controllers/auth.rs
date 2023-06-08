@@ -1,8 +1,46 @@
-use crate::{DB, FIREBASE, TEMPLATES};
+use crate::{DB, TEMPLATES};
 
 use crate::prisma::prisma;
+use jsonwebtokens as jwt;
+use jwt::raw::TokenSlices;
+use jwt::{raw, Algorithm, AlgorithmID, Verifier};
 use salvo::prelude::*;
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize  };
+use serde_json;
+
+// use chrono::{Datelike, Timelike, Utc};
+
+#[derive(Serialize, Deserialize)]
+struct Claims {
+    exp: usize, // Required (validate_exp defaults to true in validation). Expiration time (as UTC timestamp)
+    iat: usize, // Optional. Issued at (as UTC timestamp)
+    aud: String, // Optional. Audience
+    iss: String, // Optional. Issuer
+    sub: String, // Optional. Subject (whom token refers to)
+    auth_time: usize, // Optional. Not Before (as UTC timestamp)
+}
+
+
+pub fn verify_firebase_jwt(token: &String) {
+    let TokenSlices {
+        message,
+        signature,
+        header,
+        claims,
+    } = raw::split_token(token).unwrap();
+
+    let headers = raw::decode_json_token_slice(header).unwrap();
+
+    let payload  = raw::decode_json_token_slice(claims).unwrap();
+    let claims: Claims = serde_json::from_value(payload).unwrap();
+    println!();
+    println!("value: {:?}", claims.iss);
+    println!("aud: {:?}", claims.aud);
+    println!();
+
+
+    // println!("value: {:?}", claims.get("exp"));
+}
 
 #[handler]
 pub async fn login_page(_: &mut Request, res: &mut Response) {
@@ -30,15 +68,8 @@ pub async fn sign_in(req: &mut Request, res: &mut Response) {
             return;
         }
     };
-
-    match FIREBASE.refresh_id_token(&parsed.token_id).await {
-        Ok(refresh_id_token_response) => {
-            println!("refresh_id_token_response: {:?}", refresh_id_token_response);
-        }
-        Err(error) => {
-            println!("Error en refresh_id_token: {:?}", error);
-        }
-    }
+    let token_id = parsed.token_id;
+    verify_firebase_jwt(&token_id);
 
     res.render(Redirect::permanent("/app"));
     // let signup_template = SignUpTemplate{};
