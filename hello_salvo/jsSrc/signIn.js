@@ -14,19 +14,28 @@ form.addEventListener("submit", async (event) => {
     email,
     password
   );
-  if (userCredential) {
-    const result = await fetch("/auth/sign_in", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Response-Type": "*",
-      },
-      body: JSON.stringify({
-        email: email,
-        token_id: userCredential.user.refreshToken,
-      }),
-    });
-    console.log(result)
+  console.log(userCredential);
+
+  let userToken;
+  try {
+    userToken = await auth.currentUser?.getIdToken();
+    console.log(userToken);
+  } catch (error) {
+    alert(error.message);
+    return;
   }
 
+  console.log("enter method");
+  const result = await fetch("/auth/sign_in", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Response-Type": "*",
+    },
+    body: JSON.stringify({
+      email: email,
+      token_id: userToken,
+    }),
+  });
+  console.log(result);
 });

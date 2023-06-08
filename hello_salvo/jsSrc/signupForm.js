@@ -17,20 +17,22 @@ form.addEventListener("submit", async (event) => {
   const password = form.password.value;
   const name = form.name.value;
 
+  let userCredentials;
   console.log(email, password);
-  const userCredentials = await createUserWithEmailAndPassword(
-    auth,
-    email,
-    password
-  );
-
-  if (!userCredentials) {
+  try {
+    userCredentials = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+  } catch (error) {
     console.log("Error creating user firebase");
-    // TODO: Desplegar error al usuario
+    window.alert(error);
+
     return;
   }
   // set user name
-  await updateProfile(auth.currentUser,{displayName: name});
+  await updateProfile(auth.currentUser, { displayName: name });
 
   const idTokenGenerated = await userCredentials.user.getIdToken();
 
@@ -48,6 +50,8 @@ form.addEventListener("submit", async (event) => {
 
   if (!serverResponse.ok) {
     console.log("Error in ");
+    window.alert("Error in server");
+
     // TODO: Desplegar error al usuario
   }
 });
