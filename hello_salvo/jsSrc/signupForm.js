@@ -2,12 +2,9 @@
 import { auth } from "./firebase.js";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
-/** @type {HTMLFormElement}  */
-// @ts-ignore
-
-console.log("");
-
-const form = document.getElementById("signupForm");
+const form =
+  /** @type {HTMLFormElement } */
+  (document.getElementById("signupForm"));
 console.log(form);
 
 form.addEventListener("submit", async (event) => {
@@ -15,7 +12,9 @@ form.addEventListener("submit", async (event) => {
 
   const email = form.email.value;
   const password = form.password.value;
+  // @ts-ignore
   const name = form.name.value;
+
 
   let userCredentials;
   console.log(email, password);
@@ -32,6 +31,7 @@ form.addEventListener("submit", async (event) => {
     return;
   }
   // set user name
+  // @ts-ignore
   await updateProfile(auth.currentUser, { displayName: name });
 
   const idTokenGenerated = await userCredentials.user.getIdToken();
@@ -51,7 +51,5 @@ form.addEventListener("submit", async (event) => {
   if (!serverResponse.ok) {
     console.log("Error in ");
     window.alert("Error in server");
-
-    // TODO: Desplegar error al usuario
   }
 });

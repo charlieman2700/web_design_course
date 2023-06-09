@@ -4598,6 +4598,7 @@ dependencies = [
  "jsonwebtokens",
  "lazy_static",
  "prisma-client-rust",
+ "reqwest",
  "salvo",
  "serde",
  "serde_json",
