@@ -15,7 +15,6 @@ form.addEventListener("submit", async (event) => {
   // @ts-ignore
   const name = form.name.value;
 
-
   let userCredentials;
   console.log(email, password);
   try {
@@ -33,8 +32,7 @@ form.addEventListener("submit", async (event) => {
   // set user name
   // @ts-ignore
   await updateProfile(auth.currentUser, { displayName: name });
-
-  const idTokenGenerated = await userCredentials.user.getIdToken();
+  const tokenID = await auth.currentUser?.getIdToken();
 
   const serverResponse = await fetch("/auth/sign_up", {
     headers: {
@@ -42,14 +40,18 @@ form.addEventListener("submit", async (event) => {
     },
     method: "POST",
     body: JSON.stringify({
-      token_id: idTokenGenerated,
       name: name,
-      email: email,
+      token_id: tokenID,
     }),
   });
+
+  if (serverResponse.ok) {
+    window.location.href = "/app";
+  } else
 
   if (!serverResponse.ok) {
     console.log("Error in ");
     window.alert("Error in server");
   }
+
 });

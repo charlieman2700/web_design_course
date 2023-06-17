@@ -3,7 +3,7 @@
 
 generator client {
   provider = "cargo prisma"
-  output   = "../src/prisma.rs"
+  output   = "./prisma.rs"
 }
 
 datasource db {
@@ -12,14 +12,12 @@ datasource db {
 }
 
 model User {
-  id        Int @id @default(autoincrement())
-  user_type User_Type 
+  id        Int       @id @default(autoincrement())
+  user_type User_Type
   name      String
-  email     String @unique
-  password  String
+  email     String    @unique
   posts     Post[]
   comments  Comment[]
-
 }
 
 enum User_Type {
@@ -27,32 +25,39 @@ enum User_Type {
   ENTERPRISE
 }
 
-model Post{
-  id        Int @id @default(autoincrement())
-  title     String
-  abstract  String
-  imageLink String
-  content   String
-  user      User @relation(fields: [user_id], references: [id])
-  user_id   Int
-  comments  Comment[]
+model Post {
+  id         Int                 @id @default(autoincrement())
+  title      String
+  abstract   String
+  imageLink  String
+  content    String
+  user       User                @relation(fields: [user_id], references: [id])
+  user_id    Int
+  comments   Comment[]
+  categories CategoriesOnPosts[]
 }
 
-model Comment{
-  id        Int @id @default(autoincrement())
-  content   String
-  user      User? @relation(fields: [user_id], references: [id])
-  user_id   Int?
+model Comment {
+  id          Int     @id @default(autoincrement())
+  content     String
+  user        User?   @relation(fields: [user_id], references: [id])
+  user_id     Int?
   guest_email String?
-  post      Post @relation(fields: [post_id], references: [id])
-  post_id   Int
-  categories CommentCategory[]
+  post        Post    @relation(fields: [post_id], references: [id])
+  post_id     Int
 }
 
-model CommentCategory{
-  id        Int @id @default(autoincrement())
-  name      String
-  comments  Comment[]
+model PostCategory {
+  id   Int                 @id @default(autoincrement())
+  name String
+  post CategoriesOnPosts[]
 }
 
+model CategoriesOnPosts {
+  post        Post         @relation(fields: [post_id], references: [id])
+  post_id     Int
+  category    PostCategory @relation(fields: [category_id], references: [id])
+  category_id Int
 
+  @@id([post_id, category_id])
+}

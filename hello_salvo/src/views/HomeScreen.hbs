@@ -1,0 +1,81 @@
+{{#*inline "page"}}
+<div class="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+  <!-- Main 3 column grid -->
+  <div class="grid grid-cols-1 items-start gap-4 lg:grid-cols-5 lg:gap-8">
+    <div class="grid grid-cols-1 gap-4 lg:col-span-4">
+      <section aria-labelledby="section-1-title">
+        <div class="overflow-hidden rounded-lg bg-white shadow">
+          <div class="p-6">
+            <!-- Your content -->
+            {{!--
+            {{#each posts}}
+            --}}
+            {{!-- {{ post }} --}}
+            <h1 class="text-5xl">Artículos</h1>
+            <br />
+            <!-- Articulo -->
+            <article>
+              <h2 class="text-2xl">Título de artículo</h2>
+              <p>01/02/2023</p>
+              <div class="mt-2">
+                <img class="h-auto w-10/12"
+                  src="https://contenthub-static.grammarly.com/blog/wp-content/uploads/2022/08/BMD-3398.png" />
+              </div>
+              <!-- Abstract -->
+              <p class="w-11/12 mt-3">
+                News articles report on current events that are relevant
+                to the readership of a publication. These current events
+                might take place locally, nationally, or
+                internationally. News writing is a skill that’s used
+                worldwide, but this writing format—with its unique rules
+                and structure—differs from other forms of writing.
+                Understanding how to write a news story correctly can
+                ensure you’re performing your journalistic duty to your
+                audience.
+              </p>
+              <section class="mt-2 flex flex-row  text-indigo-700">
+                <a class=href="">Autor: Carlos Solorzano</a>
+                <a class="ml-3" href="">Comentarios: 7</a>
+              </section>
+            </article>
+            {{!-- {{/each}} --}}
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class="">
+      <div class="py-3 font-bold rounded-lg bg-white shadow text-center">
+        <a href="/create_article">Crea un nuevo artículo</a>
+      </div>
+      <div class="mt-5 overflow-hidden rounded-lg bg-white shadow">
+        <div class="p-6">
+          <!-- Your content -->
+          <h2 class="text-2xl">Categorías</h2>
+          <ul class="mt-2 ml-5 list-disc">
+            {{!--
+            {{#each categories}}
+            --}}
+            <li>Categoría 1</li>
+            <li>Categoría 2</li>
+            <li>Categoría 3</li>
+            {{!--
+            <li>{{ categorie }}</li>
+            --}}
+            {{!-- {{/each}} --}}
+          </ul>
+          <br />
+          <h2 class="text-2xl">Autores</h2>
+          <ul class="mt-2 ml-5 list-disc">
+            <li>Autor 1</li>
+            <li>Autor 2</li>
+            <li>Autor 3</li>
+          </ul>
+          <br />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{{/inline}}
+
+{{> Layout/Main }}

@@ -71,6 +71,7 @@
             </div>
             <div class="mt-2 grid grid-cols-2 gap-4">
               <a href="#"
+              onclick="signInWithTwitter()"
                  class="flex w-full items-center justify-center gap-3 rounded-md bg-[#1D9BF0] px-3 py-1.5 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D9BF0]">
                 <svg class="h-5 w-5"
                      fill="currentColor"
@@ -91,13 +92,20 @@
                 <span class="text-sm font-semibold leading-6">GitHub</span>
               </a>
             </div>
+            <div class="mt-2">
+            
+            <a href="/app"
+               class=" flex w-full items-center justify-center  rounded-md bg-slate-700  py-1.5 text-white ">
+              <span class="text-sm font-semibold leading-6">Continue as guest</span>
+            </a>
+            </div>
           </div>
-          </d
-          <p class="mt-10 text-center text-sm text-gray-500">
-            <a href="/auth/sign_up"
-               class="mt-10 font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Sign up</a>
-          </p>
-        </div>
+        <p class="mt-5 text-center text-sm text-gray-500">
+        Become a member
+          <a href="/auth/sign_up"
+             class=" font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Sign up</a>
+        </p>
       </div>
-    </body>
-  </html>
+    </div>
+  </body>
+</html>

@@ -3,3 +3,5 @@ creacion_base_de_datos_direcciones/node_modules
 blog_ssr/node_modules
 blog_ssr/prisma-cli/target
 blog_ssr/target
+hello_salvo/src/controllers/auth.rs
+hello_salvo/prisma-cli/target

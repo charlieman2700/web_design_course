@@ -1,20 +1,31 @@
 // @ts-check
 import { auth } from "./firebase.js";
-import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 const form = document.getElementById("loginForm");
+// @ts-ignore
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
+  // @ts-ignore
   const email = form.email.value;
+  // @ts-ignore
   const password = form.password.value;
 
-  const userCredential = await signInWithEmailAndPassword(
-    auth,
-    email,
-    password
-  );
-  console.log(userCredential);
+  try {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+  } catch (error) {
+    alert(error.message);
+    // @ts-ignore
+    form.email.value = "";
+    // @ts-ignore
+    form.password.value = "";
+    return;
+  }
 
   let userToken;
   try {
@@ -25,7 +36,6 @@ form.addEventListener("submit", async (event) => {
     return;
   }
 
-  console.log("enter method");
   const result = await fetch("/auth/sign_in", {
     method: "POST",
     headers: {
@@ -33,9 +43,12 @@ form.addEventListener("submit", async (event) => {
       "Response-Type": "*",
     },
     body: JSON.stringify({
-      email: email,
       token_id: userToken,
     }),
   });
-  console.log(result);
+
+  if (result.ok) {
+    window.location.href = "/";
+  }
+
 });

@@ -7,9 +7,10 @@
     "tailwindcss": "^3.3.2"
   },
   "scripts": {
-    "tailwind": "tailwindcss -i ./src/input.css -o ./public/styles.css",
+    "cargo-watch":"cargo watch -w src --ignore src/prisma --ignore src/views -x run",
+    "tailwind": "tailwindcss -i ./src/input.css -o ./public/styles.css --watch",
     "snowpack": "snowpack build --watch",
-    "dev": "npm run tailwind & npm run snowpack",
+    "dev": "npm run tailwind & npm run snowpack & npm run cargo-watch",
     "build": "snowpack build & tailwindcss -i ./src/input.css -o ./public/styles.css"
   },
   "dependencies": {

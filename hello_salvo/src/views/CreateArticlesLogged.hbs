@@ -1,0 +1,119 @@
+{{#*inline "page"}}
+<div class="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+  <div class="rounded-lg bg-white">
+    <div class="p-6">
+      <h1 class="text-5xl">Nuevo Artículo</h1>
+      <div class="mt-2 flex flex-col">
+        <label for="articleTitle">Título del artículo</label>
+        <input
+          class="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          type="text" name="articleTitle" value="" />
+        <br />
+
+        <label for="articleCategories">Categoría</label>
+        <div>
+          <label for="combobox" class="block text-sm font-medium leading-6 text-gray-900">Assigned to</label>
+          <div class="relative mt-2">
+            <input id="combobox" type="text"
+              class="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              role="combobox" aria-controls="options" aria-expanded="false">
+            <button type="button"
+              class="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
+            </button>
+
+            <ul
+              class="hidden absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+              id="options" role="listbox">
+              <li class="relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900" id="option-0" role="option"
+                tabindex="-1">
+                <!-- Selected: "font-semibold" -->
+                <span class="block truncate">Leslie Alexander</span>
+
+              </li>
+
+              <li class="relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900" id="option-0" role="option"
+                tabindex="-1">
+                <!-- Selected: "font-semibold" -->
+                <span class="block truncate">Charlie</span>
+
+              </li>
+
+              <!-- More items... -->
+            </ul>
+          </div>
+        </div>
+
+
+
+
+        <br />
+        <label for="articleImageLink">Link de imágen (opcional)</label>
+        <input
+          class="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          type="text" name="articleTitle" />
+        <br />
+        <label for="articleAbstract">Abstract del artículo</label>
+        <textarea
+          class="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          rows="10"></textarea>
+        <br />
+        <label for="articleContent">Contenido del artículo</label>
+        <textarea class="shadow-sm border-2 rounded" rows="20"></textarea>
+      </div>
+      <button type="button"
+        class="float-right mt-2 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Enviar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let categories = [];
+
+
+  // Add event to the options to show the options on click and hide on click outside
+  document.getElementById('combobox').addEventListener('click', function (event) {
+    document.getElementById('options').classList.remove('hidden');
+    event.stopPropagation();
+  });
+  //Hide the options on click outside
+  document.addEventListener('click', function (event) {
+    document.getElementById('options').classList.add('hidden');
+  });
+  //Grab all the options and change classList on mouseenter and mouseleave and on click
+  let options = document.getElementById('options').children;
+  for (let i = 0; i < options.length; i++) {
+    options[i].addEventListener('mouseenter', function (event) {
+      event.target.classList.add('text-white', 'bg-indigo-600');
+    });
+
+    options[i].addEventListener('mouseleave', function (event) {
+      event.target.classList.remove('text-white', 'bg-indigo-600');
+    });
+
+    options[i].addEventListener('click', function (event) {
+      //Only push if not already in the array
+      if (categories.includes(event.target.innerText)) {
+        //How to eliminate value fom array
+        event.target.classList.remove('text-white');
+        event.target.classList.remove('bg-indigo-600');
+        categories = categories.filter(function (value, index, arr) {
+          return value != event.target.innerText;
+        });
+
+      } else {
+        event.target.classList.add('text-white', 'bg-indigo-600');
+
+        categories.push(event.target.innerText);
+      }
+      document.getElementById('combobox').value = categories.join(', ');
+      document.getElementById('options').classList.add('hidden');
+      console.log(categories);
+    });
+  }
+
+  //Make the combobox multiselect
+
+</script>
+{{/inline}}
+
+{{> Layout/Main }}
